@@ -1,41 +1,13 @@
-import React from 'react';
-
-interface ArticleProps {
-  article: {
-    title: string;
-    region: string;
-    date: string;
-    content: string;
-  };
-}
-
-export const ArticleView: React.FC<ArticleProps> = ({ article }) => {
-  if (!article) return <div className="text-white p-10">Loading article...</div>;
-
+export const ArticleView = ({ article }) => {
   return (
-    <div className="max-w-3xl mx-auto px-6 py-20 bg-black min-h-screen">
-      <nav className="mb-12">
-        <a href="/" className="text-xs font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors">
-          ← Back to Feed
-        </a>
+    <div className="max-w-3xl mx-auto px-6 py-20 bg-black">
+      <nav className="mb-10">
+        <a href="/" className="text-zinc-500 uppercase text-xs font-bold tracking-widest hover:text-white">← Back to Feed</a>
       </nav>
-
-      <span className="text-yellow-400 font-black uppercase text-xs tracking-widest">
-        {article.region}
-      </span>
-      
-      <h1 className="text-6xl md:text-8xl font-black italic uppercase leading-none my-8 text-white">
-        {article.title}
-      </h1>
-      
-      <p className="text-zinc-500 italic mb-12 border-l-4 border-yellow-400 pl-4">
-        Published on {article.date}
-      </p>
-      
-      <div className="text-zinc-300 text-xl leading-relaxed space-y-8 italic">
-        {article.content?.split('\n').map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        )) || 'No content available.'}
+      <span className="text-yellow-400 font-black uppercase text-xs">{article.region}</span>
+      <h1 className="text-5xl font-black italic uppercase text-white my-6 leading-none">{article.title}</h1>
+      <div className="text-zinc-300 text-xl leading-relaxed italic space-y-6">
+        {article.content}
       </div>
     </div>
   );
