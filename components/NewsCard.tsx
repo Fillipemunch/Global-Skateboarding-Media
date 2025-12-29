@@ -1,66 +1,43 @@
-
 import React from 'react';
 
-interface CardProps {
-  title: string;
-  category: string;
-  region?: string;
-  description: string;
-  link: string;
-  date?: string;
-  youtubeId?: string;
-  onClick?: () => void;
+interface NewsProps {
+  item: {
+    id: number;
+    region: string;
+    title: string;
+    summary: string;
+    date: string;
+  };
 }
 
-const NewsCard: React.FC<CardProps> = ({ title, category, region, description, date, youtubeId, onClick }) => {
+export const NewsCard: React.FC<NewsProps> = ({ item }) => {
   return (
-    <div className="news-item border-b border-zinc-900 py-12 mb-4 group transition-all">
-      <div className="max-w-4xl">
-        {/* Meta Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <span className="bg-white text-black text-[10px] font-black px-3 py-1 uppercase tracking-tighter">
-            {region || 'GLOBAL'}
-          </span>
-          <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.2em]">
-            {date || 'LATEST'} // {category.replace(/_/g, ' ') || 'NEWS'}
-          </span>
-        </div>
-        
-        {/* Headline */}
-        <div onClick={onClick} className="cursor-pointer">
-          <h2 className="font-skate text-5xl md:text-7xl italic leading-[0.9] text-white group-hover:text-yellow-400 transition-colors uppercase mb-6">
-            {title}
-          </h2>
-        </div>
-        
-        {/* Summary Hook */}
-        <p className="text-zinc-400 text-xl leading-relaxed italic mb-8 max-w-3xl">
-          "{description}"
-        </p>
+    <div className="border-b border-zinc-900 py-12 group bg-black">
+      <div className="flex items-center gap-4 mb-4">
+        <span className="bg-yellow-400 text-black text-[10px] font-black px-2 py-0.5 uppercase">
+          {item.region || 'GLOBAL'}
+        </span>
+        <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
+          {item.date}
+        </span>
+      </div>
+      
+      <h2 className="text-5xl md:text-7xl font-black italic uppercase leading-[0.85] mb-6 group-hover:text-yellow-400 transition-colors text-white">
+        {item.title}
+      </h2>
+      
+      <p className="text-zinc-400 text-xl italic max-w-2xl mb-8">
+        {item.summary}
+      </p>
 
-        {/* Action Links */}
-        <div className="flex items-center gap-8">
-          <button 
-            onClick={onClick}
-            className="text-white border-b-2 border-white pb-1 text-sm font-black uppercase tracking-widest hover:text-yellow-400 hover:border-yellow-400 transition-all"
-          >
-            Read Full Report →
-          </button>
-          
-          {youtubeId && (
-            <a 
-              href={`https://www.youtube.com/watch?v=${youtubeId.trim()}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-zinc-600 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] transition-all"
-            >
-              External Link: YouTube
-            </a>
-          )}
-        </div>
+      <div className="flex gap-6">
+        <a 
+          href={`/article?id=${item.id}`} 
+          className="inline-block border-b-2 border-white pb-1 text-sm font-black uppercase tracking-widest hover:border-yellow-400 hover:text-yellow-400 transition-all text-white"
+        >
+          Read Full Report →
+        </a>
       </div>
     </div>
   );
 };
-
-export default NewsCard;
