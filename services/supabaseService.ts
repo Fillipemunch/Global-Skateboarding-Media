@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://ychdbnvlavthuxyqilao.supabase.co';
 const supabaseKey = 'sb_publishable_EF3NOnSYjESYEboB3MeSsA_fKLVjcq-';
-
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const fetchNews = async () => {
