@@ -12,7 +12,7 @@ export const fetchNews = async () => {
     .order('id', { ascending: false });
 
   if (error) {
-    console.error('Erro Supabase:', error.message);
+    console.error('Erro de ligação:', error.message);
     throw error;
   }
   return data;
