@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SkateNewsItem } from '../types';
 
@@ -15,7 +14,7 @@ const ArticleView: React.FC<ArticleViewProps> = ({ article, onBack }) => {
     if (article.youtube_id) {
       return `https://img.youtube.com/vi/${article.youtube_id}/maxresdefault.jpg`;
     }
-    return `https://source.unsplash.com/featured/?skateboarding,${article.category}`;
+    return `https://images.unsplash.com/photo-1547447134-cd3f5c716030?q=80&w=1000&auto=format&fit=crop`;
   };
 
   return (
@@ -49,24 +48,12 @@ const ArticleView: React.FC<ArticleViewProps> = ({ article, onBack }) => {
           </div>
 
           <div className="mb-20 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] border-4 border-zinc-900 bg-zinc-950 overflow-hidden">
-            {article.youtube_id ? (
-              <div className="aspect-video w-full">
-                <iframe 
-                  className="w-full h-full" 
-                  src={`https://www.youtube.com/embed/${article.youtube_id}?autoplay=0&rel=0`} 
-                  title={article.title}
-                  frameBorder="0" 
-                  allowFullScreen
-                ></iframe>
-              </div>
-            ) : (
-              <img 
-                src={getDisplayImage()} 
-                alt={article.title} 
-                className="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700" 
-                onError={(e) => (e.currentTarget.src = `https://via.placeholder.com/1000x600?text=TRANSMISSION_ERROR`)}
-              />
-            )}
+            <img 
+              src={getDisplayImage()} 
+              alt={article.title} 
+              className="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700 block" 
+              onError={(e) => (e.currentTarget.src = `https://via.placeholder.com/1000x600?text=TRANSMISSION_ERROR`)}
+            />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
@@ -88,16 +75,16 @@ const ArticleView: React.FC<ArticleViewProps> = ({ article, onBack }) => {
                     href={article.url} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-white hover:text-yellow-400 transition-colors font-black text-sm underline decoration-zinc-800 underline-offset-8"
+                    className="text-white hover:text-yellow-400 transition-colors font-black text-sm underline decoration-zinc-800 underline-offset-8 break-all"
                   >
                     {article.url}
                   </a>
                 </div>
                 <button 
                    onClick={() => window.open(article.url, '_blank')}
-                   className="bg-white text-black px-10 py-5 font-black uppercase text-[10px] tracking-widest hover:bg-yellow-400 transition-all"
+                   className="bg-white text-black px-10 py-5 font-black uppercase text-[10px] tracking-widest hover:bg-yellow-400 transition-all whitespace-nowrap"
                 >
-                  Visit Origin
+                  {article.youtube_id ? 'Watch Video' : 'Visit Origin'}
                 </button>
               </div>
             </div>

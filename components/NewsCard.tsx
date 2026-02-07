@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 interface CardProps {
@@ -7,22 +6,19 @@ interface CardProps {
   description: string;
   link: string;
   badge?: string;
-  youtubeId?: string;
+  imageUrl?: string;
 }
 
-const NewsCard: React.FC<CardProps> = ({ title, category, description, link, badge, youtubeId }) => {
+const NewsCard: React.FC<CardProps> = ({ title, category, description, link, badge, imageUrl }) => {
   return (
     <div className="border-l-4 border-yellow-400 bg-zinc-900 card-shadow group hover:bg-zinc-800/50 transition-all duration-300 flex flex-col h-full overflow-hidden">
-      {youtubeId && (
-        <div className="aspect-video bg-black">
-          <iframe
-            className="w-full h-full"
-            src={`https://www.youtube.com/embed/${youtubeId}`}
-            title={title}
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+      {imageUrl && (
+        <div className="aspect-video bg-black overflow-hidden">
+          <img 
+            src={imageUrl} 
+            alt={title} 
+            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" 
+          />
         </div>
       )}
       <div className="p-8 flex flex-col flex-grow">
