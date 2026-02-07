@@ -4,11 +4,18 @@ import { SYSTEM_INSTRUCTIONS, MASTER_PROMPT } from "../constants";
 import { SkateNewsItem, GroundingChunk } from "../types";
 
 export const fetchSkateHubData = async (): Promise<{ data: SkateNewsItem[], sources: GroundingChunk[] }> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  // Directly access process.env.API_KEY as per standard requirement
+  const apiKey = process.env.API_KEY;
+  
+  if (!apiKey) {
+    throw new Error("UPLINK_FAILURE: API Key is missing from environment.");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-pro-preview", // Upgraded to Pro for better stability with complex JSON
+      model: "gemini-3-pro-preview",
       contents: MASTER_PROMPT,
       config: {
         systemInstruction: SYSTEM_INSTRUCTIONS,
@@ -41,7 +48,6 @@ export const fetchSkateHubData = async (): Promise<{ data: SkateNewsItem[], sour
       result = JSON.parse(text);
     } catch (parseError) {
       console.error("JSON Parse Error. Attempting to repair truncated response...", parseError);
-      // Simple repair: if it's truncated, try to close the array
       if (text.trim().startsWith('[') && !text.trim().endsWith(']')) {
         try {
           const repairedText = text.substring(0, text.lastIndexOf('}')) + '}]';
