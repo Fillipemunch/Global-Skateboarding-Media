@@ -1,14 +1,12 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { SYSTEM_INSTRUCTIONS, MASTER_PROMPT } from "../constants";
 import { SkateNewsItem, GroundingChunk } from "../types";
 
 export const fetchSkateHubData = async (): Promise<{ data: SkateNewsItem[], sources: GroundingChunk[] }> => {
-  // Directly access process.env.API_KEY as per standard requirement
   const apiKey = process.env.API_KEY;
   
-  if (!apiKey) {
-    throw new Error("UPLINK_FAILURE: API Key is missing from environment.");
+  if (!apiKey || apiKey === "undefined") {
+    throw new Error("UPLINK_FAILURE: API Key is missing. Ensure the API_KEY environment variable is set in your deployment dashboard.");
   }
 
   const ai = new GoogleGenAI({ apiKey });
@@ -47,14 +45,11 @@ export const fetchSkateHubData = async (): Promise<{ data: SkateNewsItem[], sour
     try {
       result = JSON.parse(text);
     } catch (parseError) {
-      console.error("JSON Parse Error. Attempting to repair truncated response...", parseError);
+      console.error("JSON Parse Error. Attempting recovery...", parseError);
+      // Basic recovery for truncated JSON
       if (text.trim().startsWith('[') && !text.trim().endsWith(']')) {
-        try {
-          const repairedText = text.substring(0, text.lastIndexOf('}')) + '}]';
-          result = JSON.parse(repairedText);
-        } catch (retryError) {
-          throw new Error("Critical Failure: Gemini returned malformed and unrepairable data.");
-        }
+        const repairedText = text.substring(0, text.lastIndexOf('}')) + '}]';
+        result = JSON.parse(repairedText);
       } else {
         throw parseError;
       }
