@@ -1,43 +1,67 @@
+
 import React from 'react';
 
-interface NewsProps {
-  item: {
-    id: number;
-    region: string;
-    title: string;
-    summary: string;
-    date: string;
-  };
+interface CardProps {
+  title: string;
+  category: string;
+  description: string;
+  link: string;
+  badge?: string;
+  youtubeId?: string;
 }
 
-export const NewsCard: React.FC<NewsProps> = ({ item }) => {
+const NewsCard: React.FC<CardProps> = ({ title, category, description, link, badge, youtubeId }) => {
   return (
-    <div className="border-b border-zinc-900 py-12 group bg-black">
-      <div className="flex items-center gap-4 mb-4">
-        <span className="bg-yellow-400 text-black text-[10px] font-black px-2 py-0.5 uppercase">
-          {item.region}
-        </span>
-        <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
-          {item.date}
-        </span>
-      </div>
-      
-      <h2 className="text-5xl md:text-7xl font-black italic uppercase leading-[0.85] mb-6 group-hover:text-yellow-400 transition-colors text-white text-left">
-        {item.title}
-      </h2>
-      
-      <p className="text-zinc-400 text-xl italic max-w-2xl mb-8 text-left">
-        {item.summary}
-      </p>
+    <div className="border-l-4 border-yellow-400 bg-zinc-900 card-shadow group hover:bg-zinc-800/50 transition-all duration-300 flex flex-col h-full overflow-hidden">
+      {youtubeId && (
+        <div className="aspect-video bg-black">
+          <iframe
+            className="w-full h-full"
+            src={`https://www.youtube.com/embed/${youtubeId}`}
+            title={title}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      )}
+      <div className="p-8 flex flex-col flex-grow">
+        <div className="flex justify-between items-start mb-4">
+          <span className="text-[10px] uppercase font-black text-yellow-400 tracking-[0.2em] bg-zinc-950 px-2 py-1">
+            {category}
+          </span>
+          {badge && (
+            <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest border border-zinc-800 px-2 py-1">
+              {badge}
+            </span>
+          )}
+        </div>
+        
+        <h2 className="text-2xl font-black italic italic-headline text-white mt-2 uppercase leading-none group-hover:text-yellow-400 transition-colors">
+          {title}
+        </h2>
+        
+        <p className="text-zinc-400 mt-6 font-medium text-sm leading-relaxed mb-8 flex-grow">
+          {description}
+        </p>
 
-      <div className="flex justify-start">
-        <a 
-          href={`/article?id=${item.id}`} 
-          className="inline-block border-b-2 border-white pb-1 text-sm font-black uppercase tracking-widest hover:border-yellow-400 hover:text-yellow-400 transition-all text-white"
-        >
-          Read Full Report →
-        </a>
+        <div className="mt-auto flex items-center justify-between">
+          <a 
+            href={link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center text-[11px] font-black uppercase tracking-[0.2em] text-white hover:text-yellow-400 transition-colors"
+          >
+            Full Intel
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-3 h-3 ml-2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+          <div className="w-12 h-[1px] bg-zinc-800"></div>
+        </div>
       </div>
     </div>
   );
 };
+
+export default NewsCard;

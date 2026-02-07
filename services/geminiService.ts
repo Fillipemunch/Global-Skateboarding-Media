@@ -8,7 +8,7 @@ export const fetchSkateHubData = async (): Promise<{ data: SkateNewsItem[], sour
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3-pro-preview", // Upgraded to Pro for better stability with complex JSON
       contents: MASTER_PROMPT,
       config: {
         systemInstruction: SYSTEM_INSTRUCTIONS,
@@ -19,10 +19,7 @@ export const fetchSkateHubData = async (): Promise<{ data: SkateNewsItem[], sour
           items: {
             type: Type.OBJECT,
             properties: {
-              id: { type: Type.STRING },
-              region: { type: Type.STRING, enum: ['BRAZIL', 'EUROPE', 'USA', 'GLOBAL'] },
               category: { type: Type.STRING, enum: ['industry', 'culture', 'video_parts', 'event_2025_recap', 'event_2026_schedule', 'brand_history'] },
-              date: { type: Type.STRING },
               title: { type: Type.STRING },
               summary: { type: Type.STRING },
               content: { type: Type.STRING },
@@ -31,23 +28,35 @@ export const fetchSkateHubData = async (): Promise<{ data: SkateNewsItem[], sour
               youtube_id: { type: Type.STRING },
               image_url: { type: Type.STRING }
             },
-            required: ['id', 'region', 'category', 'title', 'summary', 'url', 'is_hero', 'content', 'date']
+            required: ['category', 'title', 'summary', 'url', 'is_hero', 'content']
           }
         }
       }
     });
 
-    let text = response.text || '[]';
-    text = text.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim();
-
+    const text = response.text || '[]';
+    let result: SkateNewsItem[] = [];
+    
     try {
-      const result = JSON.parse(text);
-      const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
-      return { data: result, sources: groundingChunks };
+      result = JSON.parse(text);
     } catch (parseError) {
-      console.error("JSON Parsing Error:", parseError);
-      throw new Error("Critical Sync Error: Response body corrupted.");
+      console.error("JSON Parse Error. Attempting to repair truncated response...", parseError);
+      // Simple repair: if it's truncated, try to close the array
+      if (text.trim().startsWith('[') && !text.trim().endsWith(']')) {
+        try {
+          const repairedText = text.substring(0, text.lastIndexOf('}')) + '}]';
+          result = JSON.parse(repairedText);
+        } catch (retryError) {
+          throw new Error("Critical Failure: Gemini returned malformed and unrepairable data.");
+        }
+      } else {
+        throw parseError;
+      }
     }
+
+    const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+
+    return { data: result, sources: groundingChunks };
   } catch (error) {
     console.error("Gemini Scan Failed:", error);
     throw error;

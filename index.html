@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GRIND PULSE | Global Skateboarding Media</title>
+    <title>GRIND PULSE | Global Skate News</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,10 +20,6 @@
         font-family: 'Archivo Black', sans-serif;
         text-transform: uppercase;
       }
-      .font-skate {
-        font-family: 'Archivo Black', sans-serif;
-        letter-spacing: -0.05em;
-      }
       .italic-headline {
         font-style: italic;
         letter-spacing: -0.05em;
@@ -35,7 +31,7 @@
       .ticker-content {
         display: inline-block;
         padding-left: 100%;
-        animation: ticker 90s linear infinite;
+        animation: ticker 60s linear infinite; /* Slowed down from 30s to 60s */
       }
       @keyframes ticker {
         0% { transform: translate3d(0, 0, 0); }
@@ -60,47 +56,8 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #facc15;
       }
-      
-      /* Safety overrides to prevent broken players */
-      iframe, .video-container {
-        display: none !important;
-      }
-
-      .news-item {
-        transition: transform 0.3s ease;
-      }
-
-      .news-item:hover {
-        transform: translateX(10px);
-      }
-
-      /* Heritage Grid Styles */
-      .brand-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 2rem;
-      }
-      .brand-card {
-        border: 1px solid #27272a;
-        padding: 2.5rem;
-        transition: all 0.3s ease;
-        background: #09090b;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-      .brand-card:hover {
-        border-color: #facc15;
-        background: #18181b;
-        transform: translateY(-4px);
-      }
-
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+      .skate-border {
+        border-image: linear-gradient(to right, #facc15, #000) 1;
       }
     </style>
     <script type="importmap">
