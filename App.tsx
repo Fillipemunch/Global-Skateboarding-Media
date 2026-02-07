@@ -104,7 +104,7 @@ const App: React.FC = () => {
            <h2 className="text-red-500 font-black text-4xl italic tracking-tighter mb-4">SIGNAL LOST</h2>
            <p className="text-zinc-400 font-medium mb-8 leading-relaxed">{error}</p>
            <div className="text-[10px] text-zinc-600 font-mono mb-8 uppercase tracking-widest bg-black p-4 text-left">
-              Help: If running on Netlify, go to Site Settings > Env Variables and add API_KEY.
+              Help: If running on Netlify, go to Site Settings &gt; Env Variables and add API_KEY.
            </div>
            <button onClick={() => loadData(true)} className="bg-white text-black px-10 py-4 font-black uppercase text-[10px] tracking-widest hover:bg-yellow-400 transition-colors">Retry Uplink</button>
         </div>
